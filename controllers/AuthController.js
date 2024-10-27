@@ -11,8 +11,6 @@ module.exports.Signup = async (req, res, next) => {
     }
     const newUser = await user.create({ email, password, username });
     const token = createSecretToken(newUser._id);
-    console.log(token);
-
     res.cookie("token", token, {
       withCredentials: true,
       httpOnly: false,

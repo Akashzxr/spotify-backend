@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
-const authRoute = require("./routes/AuthRoute")
+const authRoute = require("./routes/AuthRoute");
+const playlistRoute = require("./routes/PlaylistRoute");
 
 const app = express();
 const {MONGO_URL,PORT} = process.env;
@@ -31,6 +32,5 @@ app.use(cookieParser());
 
 app.use(express.json());
 
-
-
 app.use("/", authRoute)
+app.use("/playlist", playlistRoute)
