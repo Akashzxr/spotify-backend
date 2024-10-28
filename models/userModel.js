@@ -12,8 +12,13 @@ const userSchema = new mongoose.Schema({
       required: [true, "Your username is required"],
     },
     playlists: [{
-      type: mongoose.Schema.Types.ObjectId,
+     playlistId:{
+       type: mongoose.Schema.Types.ObjectId,
       ref: 'Playlist'  // References the Playlist model
+     },
+     playlistName: {
+       type: String,
+     }
     }],
     likedsongs : [{
       type: String,
