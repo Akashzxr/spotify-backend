@@ -3,11 +3,10 @@ const user = require("../models/userModel");
 const { getUserId } = require("../middlewares/playlistMiddleware");
 
 //create playlist
-
 module.exports.createPlaylist = async (req, res, next) => {
   try {
     const token = req.cookies.token;
-    const { name, songs } = req.body;
+    const { name } = req.body;
     //checking is there is a token
     if (!token) {
       return res.json({ status: false });
@@ -16,25 +15,27 @@ module.exports.createPlaylist = async (req, res, next) => {
     const userId = await getUserId(token);
 
     //creating a new playlist
-    const newPlaylist = await playlist.create({ name, songs, userId });
-    res.json({
-      message: "playlist succesfully created",
-      playlist: newPlaylist,
-    });
+    const newPlaylist = await playlist.create({ name, userId });
 
     //adding the created playlist id to the users playlist
     const updateUser = await user.findByIdAndUpdate(
       userId,
-      { $addToSet: { playlists: newPlaylist._id } }, //$addtoset to prevent duplicate
+      { $addToSet: { playlists: { playlistId: newPlaylist._id, playlistName: newPlaylist.name } } }, //$addtoset to prevent duplicate
       { new: true, useFindAndModify: false }
     );
+
+    res.json({
+      message: "playlist succesfully created",
+      playlist: newPlaylist,
+      updateduser: updateUser,
+    });
+    
   } catch (error) {
     console.error(error);
   }
 };
 
-//updating a playlist
-
+//adding song to a playlist
 module.exports.addSongToPlaylist = async (req, res, next) => {
   try {
     const updateplaylist = await playlist.findByIdAndUpdate(
@@ -78,3 +79,47 @@ module.exports.likeSong = async (req, res, next) => {
     console.error(error);
   }
 };
+
+
+//getting the user playlist data function
+module.exports.getPlaylists = async (req,res,next) => {
+  try {
+    const token = req.cookies.token;
+    //checking if ther is a token
+    if (!token) {
+      return res.json({ status: false });
+    }
+    //getting the userid from the token
+    const userId = await getUserId(token);
+
+     //getting the information from user database
+     const userInfo = await user.findById(userId);
+     res.json({
+      playlists : userInfo.playlists
+     })
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+//getting the liked songs of user
+module.exports.getLikedSongs = async (req,res,next) => {
+  try {
+    const token = req.cookies.token;
+    //checking if ther is a token
+    if (!token) {
+      return res.json({ status: false });
+    }
+    //getting the userid from the token
+    const userId = await getUserId(token);
+
+    //getting the liked songs
+    const userInfo = await user.findById(userId);
+    res.json({
+     likedsongs: userInfo.likedsongs,
+    })
+  } catch (error) {
+    console.error(error);
+    
+  }
+}
