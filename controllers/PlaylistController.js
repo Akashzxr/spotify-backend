@@ -80,7 +80,6 @@ module.exports.likeSong = async (req, res, next) => {
   }
 };
 
-
 //getting the user playlist data function
 module.exports.getPlaylists = async (req,res,next) => {
   try {
@@ -120,6 +119,45 @@ module.exports.getLikedSongs = async (req,res,next) => {
     })
   } catch (error) {
     console.error(error);
-    
   }
 }
+
+//getting the songs in the playlist
+module.exports.getPlaylistSongs = async (req,res,next) => {
+  try {
+    const playlistData = await playlist.findById(req.query.playlistId)
+    res.json({
+      song: playlistData.songs,
+    })
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//playlist deleting function
+module.exports.deletePlaylist = async (req,res,next) => {
+  try {
+    const playlistid = req.params.playlistId;
+    const playlistResult = await playlist.findById(playlistid)
+    const userId = playlistResult.userId
+    
+    //deleting the playlist id from user
+    const userResult = await user.findByIdAndUpdate(
+      userId,
+      { $pull: { playlists: {playlistId: playlistid}}},
+      { new: true }
+    )
+    
+    if (!playlistResult) {
+      return res.status(404).json({ message: "Playlist not found" });
+    }
+    
+    res.json({
+      message: "deleted the playlist",
+      playlist: playlistResult,
+      user: userResult,
+    })
+  } catch (error) {
+    console.error(error);
+  }
+} 
