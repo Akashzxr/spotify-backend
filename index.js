@@ -22,7 +22,7 @@ app.listen(PORT,() => {
 
 app.use(
     cors({
-        origin: ["http://localhost:4000","http://localhost:5173"],
+        origin: ["https://spotify-backend-9b49.onrender.com","https://spotify-clone-mern-owmlq9827-akashzxrs-projects.vercel.app/"],
         methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
        credentials: true,
     })
