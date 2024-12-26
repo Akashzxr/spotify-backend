@@ -26,13 +26,16 @@ module.exports.Signup = async (req, res, next) => {
 module.exports.Login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    //check if email and password is provided
     if (!email || !password) {
       return res.json({ message: "All fields are required" });
     }
+    //finding user by email
     const userDetails = await user.findOne({ email });
     if (!user) {
       return res.json({ message: "Incorrect password or email" });
     }
+    //verify passsword
     const auth = await bcrypt.compare(password, userDetails.password);
     if (!auth) {
       return res.json({ message: "Incorrect password or email" });
@@ -40,6 +43,13 @@ module.exports.Login = async (req, res, next) => {
     const token = await createSecretToken(userDetails._id);
     console.log("token in login:"+token);
     
+     // Check if token exists in cookies
+     const existingToken = req.cookies.token;
+     console.log("existing:"+existingToken);
+     
+
+     res.clearCookie("token", { path: "/" });
+
     res
       .cookie("token", token, {
         withCredentials: true,
