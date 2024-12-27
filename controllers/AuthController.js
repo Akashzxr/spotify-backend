@@ -48,14 +48,14 @@ module.exports.Login = async (req, res, next) => {
      console.log("existing:"+existingToken);
      
 
-     res.clearCookie("token", { path: "/" });
+    /*  res.clearCookie("token", { path: "/" });
 
     res
       .cookie("token", token, {
         withCredentials: true,
         httpOnly: false,
       })
-      
+       */
         res
           .status(201)
           .json({ message: "User logged in successfully", success: true,token:token });
