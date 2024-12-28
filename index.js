@@ -5,7 +5,7 @@ require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const authRoute = require("./routes/AuthRoute");
 const playlistRoute = require("./routes/PlaylistRoute");
-
+app.use(cookieParser());
 const app = express();
 const {MONGO_URL,PORT} = process.env;
 
@@ -28,9 +28,6 @@ app.listen(PORT,() => {
     console.log(`server is listening on port ${PORT}`);
 });
 
-
-
-app.use(cookieParser());
 
 app.use(express.json());
 
