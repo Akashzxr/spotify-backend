@@ -5,8 +5,8 @@ require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const authRoute = require("./routes/AuthRoute");
 const playlistRoute = require("./routes/PlaylistRoute");
-app.use(cookieParser());
 const app = express();
+app.use(cookieParser());
 const {MONGO_URL,PORT} = process.env;
 
 app.use(
