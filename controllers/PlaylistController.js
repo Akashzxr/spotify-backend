@@ -86,7 +86,7 @@ module.exports.getPlaylists = async (req,res,next) => {
     const token = req.cookies.token;
     //checking if ther is a token
     if (!token) {
-      return res.json({ status: false,message:req });
+      return res.json({ status: false,message:"no token here" });
     }
     //getting the userid from the token
     const userId = await getUserId(token);
