@@ -11,9 +11,8 @@ const {MONGO_URL,PORT} = process.env;
 
 app.use(
     cors({
-/*         origin: ["https://spotify-backend-9b49.onrender.com","https://spotify-clone-akash.netlify.app","http://localhost:5173","http://localhost:4000"],
- */    origin:'*',
-       methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
+        origin: ["https://spotify-backend-9b49.onrender.com","https://spotify-clone-akash.netlify.app","http://localhost:5173","http://localhost:4000"],
+        methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
        credentials: true,
     })
 );
